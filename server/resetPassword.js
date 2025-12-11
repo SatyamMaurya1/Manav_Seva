@@ -12,7 +12,7 @@ const resetPassword = async () => {
       { username: 'admin', email: 'admin@example.com', password: hashedPassword, role: 'admin' },
       { upsert: true }
     );
-    console.log('Password reset successfully. New password: admin123');
+    console.log('Password reset successfully. New password:');
     process.exit(0);
   } catch (error) {
     console.error('Error resetting password:', error);
