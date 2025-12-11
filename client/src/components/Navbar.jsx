@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   const navItems = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
     { name: "Activities", path: "/activities" },
     { name: "Gallery", path: "/gallery" },
     { name: "News & Events", path: "/news-events" },
@@ -15,6 +15,13 @@ const Navbar = () => {
     { name: "Career", path: "/career" },
     { name: "Tenders", path: "/tenders" },
     { name: "Contact", path: "/contact" },
+  ];
+
+  const aboutItems = [
+    { name: "About Us", path: "/about/about-us" },
+    { name: "Messages", path: "/about/messages" },
+    { name: "Governance", path: "/about/governance" },
+    { name: "Geographic Focus", path: "/about/geographic-focus" },
   ];
 
   return (
@@ -29,7 +36,53 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-6">
-          {navItems.map((item) => (
+          {/* Home */}
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `text-gray-700 hover:text-blue-600 transition ${
+                  isActive ? "font-semibold text-blue-600" : ""
+                }`
+              }
+            >
+              Home
+            </NavLink>
+          </li>
+          {/* About Dropdown */}
+          <li className="relative">
+            <button
+              onMouseEnter={() => setIsAboutOpen(true)}
+              onMouseLeave={() => setIsAboutOpen(false)}
+              className="text-gray-700 hover:text-blue-600 transition flex items-center gap-1"
+            >
+              About <ChevronDown size={16} />
+            </button>
+            {isAboutOpen && (
+              <ul
+                className="absolute top-full left-0 bg-white shadow-lg rounded-md py-2 min-w-[200px] z-50"
+                onMouseEnter={() => setIsAboutOpen(true)}
+                onMouseLeave={() => setIsAboutOpen(false)}
+              >
+                {aboutItems.map((item) => (
+                  <li key={item.path}>
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) =>
+                        `block px-4 py-2 text-gray-700 hover:bg-gray-100 transition ${
+                          isActive ? "font-semibold text-blue-600" : ""
+                        }`
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+          {/* Rest of navItems */}
+          {navItems.slice(1).map((item) => (
             <li key={item.path}>
               <NavLink
                 to={item.path}

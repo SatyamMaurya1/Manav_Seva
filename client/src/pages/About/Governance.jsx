@@ -1,83 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Loader from '../../components/Loader';
 
 const Governance = () => {
-  const boardMembers = [
-    {
-      name: 'Mrs. Priya Sharma',
-      position: 'Chairperson',
-      experience: 'Former IAS officer with 30+ years in public administration'
-    },
-    {
-      name: 'Dr. Rajesh Kumar',
-      position: 'Executive Director',
-      experience: 'PhD in Social Sciences, 20+ years in NGO management'
-    },
-    {
-      name: 'Mr. Amit Singh',
-      position: 'Treasurer',
-      experience: 'Chartered Accountant, former CFO of multinational corporation'
-    },
-    {
-      name: 'Ms. Kavita Patel',
-      position: 'Secretary',
-      experience: 'Lawyer specializing in social justice and human rights'
-    },
-    {
-      name: 'Dr. Sunil Gupta',
-      position: 'Medical Advisor',
-      experience: 'Senior physician, former head of public health department'
-    }
-  ];
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/about/governance');
+        setData(response.data);
+      } catch {
+        setError('Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) return <Loader />;
+  if (error) return <div className="text-red-500">{error}</div>;
+
+  const renderHierarchy = (nodes, level = 0) => {
+    if (!nodes || !Array.isArray(nodes)) return null;
+
+    return nodes.map((node, index) => (
+      <div key={node.id || index} className={`mb-4 ${level > 0 ? 'ml-8' : ''}`}>
+        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+          <div className="flex items-center gap-4">
+            {node.image && <img src={node.image} alt={node.name} className="w-12 h-12 rounded-full object-cover" />}
+            <div>
+              <h3 className="text-lg font-medium text-gray-900">{node.name}</h3>
+              <p className="text-blue-600 font-medium">{node.position}</p>
+              {node.experience && <p className="text-gray-600 mt-1">{node.experience}</p>}
+            </div>
+          </div>
+        </div>
+        {node.children && node.children.length > 0 && (
+          <div className="mt-4">
+            {renderHierarchy(node.children, level + 1)}
+          </div>
+        )}
+      </div>
+    ));
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Governance</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">{data.title}</h1>
 
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <h2 className="text-2xl font-semibold mb-6">Board of Directors</h2>
-          <div className="space-y-6">
-            {boardMembers.map((member, index) => (
-              <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
-                <h3 className="text-lg font-medium text-gray-900">{member.name}</h3>
-                <p className="text-blue-600 font-medium">{member.position}</p>
-                <p className="text-gray-600 mt-1">{member.experience}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <h2 className="text-2xl font-semibold mb-6">Governance Structure</h2>
-          <div className="prose max-w-none">
-            <p className="mb-4">
-              Manav Seva operates under a well-defined governance structure that ensures
-              transparency, accountability, and effective decision-making. Our governance
-              framework includes:
-            </p>
-            <ul className="list-disc list-inside mb-4">
-              <li><strong>Board of Directors:</strong> Oversees strategic direction and policy decisions</li>
-              <li><strong>Executive Committee:</strong> Implements board decisions and manages operations</li>
-              <li><strong>Audit Committee:</strong> Ensures financial transparency and compliance</li>
-              <li><strong>Program Committees:</strong> Specialized groups for different program areas</li>
-            </ul>
+          <h2 className="text-2xl font-semibold mb-6">Organizational Hierarchy</h2>
+          <div className="space-y-4">
+            {renderHierarchy(data.hierarchy)}
           </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-semibold mb-6">Code of Ethics</h2>
+          <h2 className="text-2xl font-semibold mb-6">{data.ethicsTitle}</h2>
           <div className="prose max-w-none">
-            <p className="mb-4">
-              Our organization is committed to the highest standards of ethical conduct.
-              All board members, staff, and volunteers adhere to a strict code of ethics
-              that includes:
-            </p>
+            <p className="mb-4">{data.ethicsContent}</p>
             <ul className="list-disc list-inside">
-              <li>Integrity and honesty in all dealings</li>
-              <li>Respect for human dignity and rights</li>
-              <li>Responsible stewardship of resources</li>
-              <li>Transparency in decision-making</li>
-              <li>Commitment to organizational mission</li>
+              {data.ethicsPoints && data.ethicsPoints.map((point, index) => (
+                <li key={index}>{point}</li>
+              ))}
             </ul>
           </div>
         </div>

@@ -24,3 +24,8 @@ export const getReportById = (id) => api.get(`/reports/${id}`);
 
 // Contact
 export const sendContactMessage = (data) => api.post('/contact', data);
+
+// About
+export const getAboutUs = () => api.get('/about/about-us');
+export const getMessages = () => api.get('/about/messages');
+export const getGeographicFocus = () => api.get('/about/geographic-focus');

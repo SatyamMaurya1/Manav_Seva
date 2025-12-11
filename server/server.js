@@ -23,6 +23,7 @@ app.use('/api/gallery', require('./routes/galleryRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/about', require('./routes/aboutRoutes'));
 
 // Error handling middleware
 app.use(errorHandler);

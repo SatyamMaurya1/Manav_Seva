@@ -53,3 +53,24 @@ export const deleteUser = (id) => api.delete(`/auth/users/${id}`);
 
 // Contact
 export const sendContactMessage = (data) => api.post('/contact', data);
+
+// About
+export const getAboutUs = () => api.get('/about/about-us');
+export const createOrUpdateAboutUs = (data) => api.post('/about/about-us', data);
+export const deleteAboutUs = () => api.delete('/about/about-us');
+
+export const getGovernance = () => api.get('/about/governance');
+export const createOrUpdateGovernance = (data) => api.post('/about/governance', data);
+export const deleteGovernance = () => api.delete('/about/governance');
+
+export const getGeographicFocus = () => api.get('/about/geographic-focus');
+export const createOrUpdateGeographicFocus = (data) => api.post('/about/geographic-focus', data);
+export const deleteGeographicFocus = () => api.delete('/about/geographic-focus');
+
+export const getOrganizationStructure = () => api.get('/about/organization-structure');
+export const createOrUpdateOrganizationStructure = (data) => api.post('/about/organization-structure', data);
+export const deleteOrganizationStructure = () => api.delete('/about/organization-structure');
+
+export const getMessages = () => api.get('/about/messages');
+export const createOrUpdateMessage = (data) => api.post('/about/messages', data);
+export const deleteMessage = (id) => api.delete(`/about/messages/${id}`);
